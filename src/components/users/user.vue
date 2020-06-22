@@ -23,7 +23,7 @@
       </el-col>
       <!--表格数据--->
  <el-table
-    :data="tableData"
+    :data="userList"
     height="250"
     border
     style="width: 100%">
@@ -33,21 +33,18 @@
       width="60">
     </el-table-column>
     <el-table-column
-      prop="date"
-      label="姓名"
+      prop="Pwd"
+      label="密码"
       width="180">
     </el-table-column>
     <el-table-column
       prop="name"
-      label="电话"
+      label="姓名"
       width="180">
     </el-table-column>
-    <el-table-column
-      prop="address"
-      label="创建日期">
-    </el-table-column>
+   
         <el-table-column
-      prop="address"
+      prop="token"
       label="用户状态">
     </el-table-column>
          <el-table-column
@@ -69,7 +66,7 @@ export default {
             query:"",
             pagenum:1,
             pageSize:2,
-              tableData: [{
+            tableData: [{
           date: '2016-05-03',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
@@ -97,7 +94,8 @@ export default {
           date: '2016-05-07',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
-        }]
+        }],
+        userList:[]
         }
            
         
@@ -110,11 +108,19 @@ export default {
       
         getUserList(){
           /////需要登录之外的请求需要验证请求头
-          const token =localStorage.getItem('token');
-          this.$http.defaults.headers.common['Authorization']
-          =token;
+          // const token =localStorage.getItem('token');
+          // this.$http.defaults.headers.common['Authorization']
+          // =token;
            this.$http.get(`userInfo/GetUsers`).then(res=>{
-             console.log(res);
+               if(res.status=='200')
+               {
+                   this.userList=res.data.data;
+                   this.$message.success('成功刷新列表')
+               }
+               else
+               {
+                   this.$message.success('数据获取失败')
+               }
            })
         }
     }
