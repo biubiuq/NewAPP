@@ -42,11 +42,15 @@
       label="姓名"
       width="180">
     </el-table-column>
-   
+     <el-table-column
+      prop="Create_Date"
+      label="创建时间">
+    </el-table-column>
         <el-table-column
       prop="token"
       label="用户状态">
     </el-table-column>
+     
          <el-table-column
       prop="address"
       label="操作">

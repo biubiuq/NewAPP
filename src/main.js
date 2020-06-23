@@ -14,6 +14,10 @@ Vue.use(ElementUI);
 ///自定义插件
 Vue.use(myServerhttp);
 /* eslint-disable no-new */
+////全局过滤器，处理日期
+Vue.filter('fmtdate',(v)=>{
+  return moment(v).format('YYYY-MM-DD');
+})
 new Vue({
   el: '#app',
   router,
