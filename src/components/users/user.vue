@@ -46,17 +46,41 @@
       prop="Create_Date"
       label="创建时间">
     </el-table-column>
+     <el-table-column 
+     label="用户状态"
+     ><template slot-scope="scope">
+       <el-switch
+      v-model="scope.row.Status"
+      active-color="#13ce66"
+     inactive-color="#ff4949">
+       </el-switch>
+     </template>
+         </el-table-column>
         <el-table-column
       prop="token"
-      label="用户状态">
+      label="token">
     </el-table-column>
      
          <el-table-column
       prop="address"
       label="操作">
+      <template slot-scope="scope">
+  <el-button size='mini' type="success" icon="el-icon-check" circle></el-button>
+  <el-button type="info" icon="el-icon-message" circle></el-button>
+  <el-button type="warning" icon="el-icon-star-off" circle></el-button>
+      </template>
     </el-table-column>
   </el-table>
-     
+     <!--分页--->
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pageNum"
+      :page-sizes="[2, 4, 6, 8]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
   </el-row>
   </el-card>
  </div>
@@ -70,6 +94,8 @@ export default {
             query:"",
             pagenum:1,
             pageSize:2,
+            value:true,
+            total:20,
             tableData: [{
           date: '2016-05-03',
           name: '王小虎',
@@ -101,6 +127,7 @@ export default {
         }],
         userList:[]
         }
+      
            
         
     },
@@ -109,12 +136,18 @@ export default {
     },
     ////api/{controller}/{action}/{id}
     methods:{
-      
+        handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+        this.pageSize=val;
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
         getUserList(){
           /////需要登录之外的请求需要验证请求头
-          // const token =localStorage.getItem('token');
-          // this.$http.defaults.headers.common['Authorization']
-          // =token;
+           const token =localStorage.getItem('token');
+          // this.$http.defaults.headers.common['Authorization']=token;
+           
            this.$http.get(`userInfo/GetUsers`).then(res=>{
                if(res.status=='200')
                {
