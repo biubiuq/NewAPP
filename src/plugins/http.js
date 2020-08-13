@@ -5,7 +5,7 @@
  const MyhttpSever={};
  MyhttpSever.install=(Vue)=>{
 
-      axios.defaults.baseURL="https://localhost:44341/";
+      axios.defaults.baseURL="http://localhost:5000/";
 
      
        Vue.prototype.$http=axios
