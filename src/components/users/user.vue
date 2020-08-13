@@ -167,7 +167,7 @@ export default {
     ////api/{controller}/{action}/{id}
     methods:{
        addUser(){
-          const res = this.$http.post('userInfo/AddUser',this.form);
+          const res = this.$http.post('userInfoes/AddUser',this.form);
           console.log(res);
        },
         ShowDialog()

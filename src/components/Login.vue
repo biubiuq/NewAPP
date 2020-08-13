@@ -8,7 +8,7 @@
     <el-input v-model="Users.name"></el-input>
   </el-form-item>
   <el-form-item label="密码">
-    <el-input v-model="Users.pwd"></el-input>
+    <el-input v-model="Users.password"></el-input>
   </el-form-item>
 
      <el-button 
@@ -28,13 +28,13 @@ export default {
         labelPosition: 'top',
         Users: {
           name: '',
-          pwd: ''
+          password: ''
         }
       };
     },
     methods:{
         handleLogin(){
-         this.$http.post('home/login',this.Users).then(res=>{
+         this.$http.post('userinfoes/GetUserInfo',this.Users,  {'Content-Type': 'application/x-www-form-urlencoded'} ).then(res=>{
              console.log(res);
             
              ////跳转到首页
