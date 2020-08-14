@@ -34,21 +34,23 @@ export default {
     },
     methods:{
         handleLogin(){
-         this.$http.post('userinfoes/GetUserInfo',this.Users,  {'Content-Type': 'application/x-www-form-urlencoded'} ).then(res=>{
+         this.$http.post('userinfoes/GetUserInfo',this.Users ).then(res=>{
              console.log(res);
             
              ////跳转到首页
              ////2.提示成功
              ///不成功
              ///1.提示信息
+            //aa
             
-            
-               var data =res.data
-           
-             if(data.Status=="ok") 
+             
+          
+             if(res.status==200) 
              {
-               var t= data.data;
-                console.log(t.token);
+
+               var t =res.data.entity
+                   console.log(res.data);
+                 
                  localStorage.setItem('token',t.token);
                       this.$message.success('登录成功');
                       this.$router.push({name:'home'});
