@@ -33,7 +33,7 @@
       width="60">
     </el-table-column>
     <el-table-column
-      prop="Pwd"
+      prop="password"
       label="密码"
       width="180">
     </el-table-column>
@@ -43,15 +43,17 @@
       width="180">
     </el-table-column>
      <el-table-column
-      prop="Create_Date"
+      prop="create_Date"
       label="创建时间">
     </el-table-column>
      <el-table-column 
      label="用户状态"
      ><template slot-scope="scope">
        <el-switch
-      v-model="scope.row.Status"
+      v-model="scope.row.status"
       active-color="#13ce66"
+       active-value="0"
+       inactive-value="1"
      inactive-color="#ff4949">
        </el-switch>
      </template>
@@ -88,13 +90,13 @@
       <el-input v-model="form.name" autocomplete="off"></el-input>
     </el-form-item>
     <el-form-item label="密 码" label-width="100px">
-      <el-input v-model="form.Pwd" autocomplete="off"></el-input>
+      <el-input v-model="form.password" autocomplete="off"></el-input>
     </el-form-item>
       <el-form-item label="token" label-width="100px">
       <el-input v-model="form.token" autocomplete="off"></el-input>
     </el-form-item>
-      <el-form-item label="电话" label-width="100px">
-      <el-input v-model="form.Status" autocomplete="off"></el-input>
+      <el-form-item label="地址" label-width="100px">
+      <el-input v-model="form.status" autocomplete="off"></el-input>
     </el-form-item>
   </el-form>
   <div slot="footer" class="dialog-footer">
@@ -152,22 +154,23 @@ export default {
         dialogFormVisibleAdd:false,
         form:{
          name:'',
-         Pwd:'',
+         password:'',
          token:'',
-         Status:''
+         status:''
         }
         }
       
            
         
     },
+    ///钩子函数在创建的时候加载此方法
     created(){
         this.getUserList();
     },
     ////api/{controller}/{action}/{id}
     methods:{
        addUser(){
-          const res = this.$http.post('userInfoes/AddUser',this.form);
+          const res = this.$http.post('userInfoes/PostUserInfo',this.form);
           console.log(res);
        },
         ShowDialog()
@@ -189,14 +192,15 @@ export default {
            const token =localStorage.getItem('token');
           // this.$http.defaults.headers.common['Authorization']=token;
           
-           this.$http.get(`userInfo/GetUsers`,{params:{
+           this.$http.get(`UserInfoes/GetUsers`,{params:{
                     pageNum:this.pageNum,
                     pageSize:this.pageSize
 
            }}).then(res=>{
-               if(res.status=='200')
+             console.log(res);
+               if(res.status==200)
                {
-                   this.userList=res.data.data;
+                   this.userList=res.data.entity;
                    this.total=res.data.total;
                    this.$message.success('成功刷新列表')
                }
