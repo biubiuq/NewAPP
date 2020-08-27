@@ -4,7 +4,7 @@
   <el-header  class="header">Header
     <el-row>
      <el-col :span="4">大家好我是图片</el-col>
-     <el-col :span="18" > <h3 class="middle">文档管理</h3> </el-col>
+     <el-col :span="18" > <h3 class="middle">后台管理系统</h3> </el-col>
      <el-col :span="2" > <a href="#" @click="loginout" class="loginout">退出</a>  </el-col>
     </el-row>
 

@@ -100,7 +100,7 @@
     </el-form-item>
   </el-form>
   <div slot="footer" class="dialog-footer">
-    <el-button @click="dialogFormVisible = false">取 消</el-button>
+    <el-button @click="dialogFormVisibleAdd=false">取 消</el-button>
     <el-button type="primary" @click="addUser">确 定</el-button>
   </div>
 </el-dialog>
@@ -171,6 +171,7 @@ export default {
     methods:{
        addUser(){
           const res = this.$http.post('userInfoes/PostUserInfo',this.form);
+          this.dialogFormVisibleAdd=false;
           console.log(res);
        },
         ShowDialog()
@@ -194,7 +195,10 @@ export default {
           
            this.$http.get(`UserInfoes/GetUsers`,{params:{
                     pageNum:this.pageNum,
-                    pageSize:this.pageSize
+                    pageSize:this.pageSize,
+                    userinfo:{
+                      NAME:this.query
+                    }
 
            }}).then(res=>{
              console.log(res);
