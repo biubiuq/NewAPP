@@ -24,7 +24,7 @@
       <!--表格数据--->
  <el-table
     :data="userList"
-    height="250"
+    height="500"
     border
     style="width: 100%">
      <el-table-column type="index"
@@ -35,6 +35,11 @@
     <el-table-column
       prop="password"
       label="密码"
+      width="180">
+    </el-table-column>
+       <el-table-column
+      prop="address"
+      label="地址"
       width="180">
     </el-table-column>
     <el-table-column
@@ -66,10 +71,10 @@
          <el-table-column
       prop="address"
       label="操作">
-      <template slot-scope="">
-  <el-button size='mini' type="success" icon="el-icon-check" circle></el-button>
-  <el-button type="info" icon="el-icon-message" circle></el-button>
-  <el-button type="warning" icon="el-icon-star-off" circle></el-button>
+      <template slot-scope="scope">
+  <el-button size='mini' type="success" @click="ShowRoleConfirm()" icon="el-icon-check" circle></el-button>
+  <el-button plan type="danger"  size='mini' @click="ShowDeleteUserMsg(scope.row.id)"  icon="el-icon-delete" circle></el-button>
+  <el-button  type="primary" icon="el-icon-edit" size='mini' @click="ShowEditUser(scope.row)" circle></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -84,6 +89,7 @@
       :total="total">
     </el-pagination>
     <!--4.分页--->
+    <!--新增用户对话框-->
     <el-dialog title="添加用户" :visible.sync="dialogFormVisibleAdd">
   <el-form :model="form">
     <el-form-item label="用户名" label-width="100px">
@@ -95,13 +101,58 @@
       <el-form-item label="token" label-width="100px">
       <el-input v-model="form.token" autocomplete="off"></el-input>
     </el-form-item>
-      <el-form-item label="地址" label-width="100px">
+      <el-form-item label="状态" label-width="100px">
       <el-input v-model="form.status" autocomplete="off"></el-input>
+    </el-form-item>
+      <el-form-item label="地址" label-width="100px">
+      <el-input v-model="form.address" autocomplete="off"></el-input>
     </el-form-item>
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisibleAdd=false">取 消</el-button>
     <el-button type="primary" @click="addUser">确 定</el-button>
+  </div>
+</el-dialog>
+ <!--编辑用户对话框-->
+    <el-dialog title="编辑用户" :visible.sync="dialogFormVisibleEdit">
+  <el-form :model="form">
+    <el-form-item label="用户名"  label-width="100px">
+      <el-input v-model="form.name" disabled autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="密 码" label-width="100px">
+      <el-input v-model="form.password" autocomplete="off"></el-input>
+    </el-form-item>
+      <el-form-item label="token" label-width="100px">
+      <el-input v-model="form.token" autocomplete="off"></el-input>
+    </el-form-item>
+        <el-form-item label="状态" label-width="100px">
+      <el-input v-model="form.status" autocomplete="off"></el-input>
+    </el-form-item>
+      <el-form-item label="地址" label-width="100px">
+      <el-input v-model="form.address" autocomplete="off"></el-input>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisibleEdit=false">取 消</el-button>
+    <el-button type="primary" @click="EditUser">确 定</el-button>
+  </div>
+</el-dialog>
+<!--权限分配对话框-->
+<el-dialog title="权限分配" :visible.sync="dialogFormVisibleRole">
+  <el-form :model="Role">
+    <el-form-item label="名称" label-width="100px">
+           {{"这是用户名称"}}
+    </el-form-item>
+    <el-form-item label="活动区域" label-width="100px">
+      <el-select v-model="Role.RoleName" >
+        <el-option label="区域一" value="shanghai"></el-option>
+        <el-option label="区域二" value="beijing"></el-option>
+      </el-select>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisibleRole = false">取 消</el-button>
+    <el-button type="primary" @click="dialogFormVisibleRole = false">确 定</el-button>
   </div>
 </el-dialog>
   </el-row>
@@ -117,46 +168,25 @@ export default {
         return{
             query:"",
             pageNum:1,
-            pageSize:2,
+            pageSize:8,
             value:true,
             total:20,
-            tableData: [{
-          date: '2016-05-03',
-          name: '王小虎aaaaaaaaaa',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
+         
         userList:[],
         ////对话框
         dialogFormVisibleAdd:false,
+        dialogFormVisibleEdit:false,
+        dialogFormVisibleRole:false,
         form:{
          name:'',
          password:'',
          token:'',
          status:''
+        },
+        Role:{
+          Id:'',
+          name:'',
+          RoleName:''
         }
         }
       
@@ -170,9 +200,53 @@ export default {
     ////api/{controller}/{action}/{id}
     methods:{
        addUser(){
-          const res = this.$http.post('userInfoes/PostUserInfo',this.form);
-          this.dialogFormVisibleAdd=false;
+          const res = this.$http.post('userInfoes/PostUserInfo',this.form).then(res=>{
+         this.dialogFormVisibleAdd=false;
           console.log(res);
+            this.getUserList();
+          });
+             this.form={};
+        
+       },
+       ShowRoleConfirm(){
+          this.dialogFormVisibleRole=true;
+       },
+       ShowEditUser(user)
+       {
+         this.form=user;
+        this.dialogFormVisibleEdit=true;
+       },
+       EditUser()
+       {
+          this.$http.put('userInfoes/PutUserInfo',this.form).then(res=>{
+         this.dialogFormVisibleEdit=false;
+          console.log(res);
+            this.getUserList();
+          });
+          this.form={};
+       },
+       ShowDeleteUserMsg(ids)
+       {
+           this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+           this.$http.delete(`userInfoes/DeleteUserInfo/${ids}`).then
+          (res=> {
+             this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+          this.getUserList();
+          });
+         
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
        },
         ShowDialog()
         {
@@ -206,6 +280,7 @@ export default {
                {/////////aaaaaaaaaaaaaaaaaaaaaaaaaaaa为什么没有提交到远程分页
                    this.userList=res.data.entity;
                    this.total=res.data.total;
+                      
                    this.$message.success('成功刷新列表')
                }
                else
