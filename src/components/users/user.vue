@@ -35,7 +35,7 @@
     <el-table-column
       prop="password"
       label="密码"
-      width="180">
+      width="100">
     </el-table-column>
        <el-table-column
       prop="address"
