@@ -72,7 +72,7 @@
       prop="address"
       label="操作">
       <template slot-scope="scope">
-  <el-button size='mini' type="success" @click="ShowRoleConfirm()" icon="el-icon-check" circle></el-button>
+  <el-button size='mini' type="success" @click="ShowRoleConfirm(scope.row)" icon="el-icon-check" circle></el-button>
   <el-button plan type="danger"  size='mini' @click="ShowDeleteUserMsg(scope.row.id)"  icon="el-icon-delete" circle></el-button>
   <el-button  type="primary" icon="el-icon-edit" size='mini' @click="ShowEditUser(scope.row)" circle></el-button>
       </template>
@@ -139,14 +139,16 @@
 </el-dialog>
 <!--权限分配对话框-->
 <el-dialog title="权限分配" :visible.sync="dialogFormVisibleRole">
-  <el-form :model="Role">
+  <el-form >
     <el-form-item label="名称" label-width="100px">
-           {{"这是用户名称"}}
+           {{SelectName}}={{SelectValue}}
     </el-form-item>
     <el-form-item label="活动区域" label-width="100px">
-      <el-select v-model="Role.RoleName" >
-        <el-option label="区域一" value="shanghai"></el-option>
-        <el-option label="区域二" value="beijing"></el-option>
+      <el-select v-model="SelectValue" >
+        <el-option label="请选择" value="1"></el-option>
+        <el-option :label="item.name" :value="item.role_Id"
+        v-for="(item, index) in Role" :key="index"  
+        ></el-option>
       </el-select>
     </el-form-item>
   </el-form>
@@ -178,16 +180,15 @@ export default {
         dialogFormVisibleEdit:false,
         dialogFormVisibleRole:false,
         form:{
+          Id:'',
          name:'',
          password:'',
          token:'',
          status:''
         },
-        Role:{
-          Id:'',
-          name:'',
-          RoleName:''
-        }
+        Role:'',
+        SelectName:'',
+        SelectValue:"1"
         }
       
            
@@ -208,8 +209,22 @@ export default {
              this.form={};
         
        },
-       ShowRoleConfirm(){
+       ShowRoleConfirm(row){
+           console.log(row);
+         this.SelectName=row.name;//http://localhost:5000/api/Roles/GetRole
           this.dialogFormVisibleRole=true;
+          this.$http.get('Roles/GetRole').then(res=>{
+           this.Role =  res.data;      
+          });
+          
+           this.$http.get('RoleUser/GetRoleUser',row.Id).then(res=>{
+               console.log("这是返回过来的结果")
+                var date =res.data.entity
+                if(date)
+                {
+                 this.SelectValue=data.role_Id;
+                }
+          });
        },
        ShowEditUser(user)
        {
