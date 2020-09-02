@@ -154,7 +154,7 @@
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisibleRole = false">取 消</el-button>
-    <el-button type="primary" @click="dialogFormVisibleRole = false">确 定</el-button>
+    <el-button type="primary" @click="EditRole()">确 定</el-button>
   </div>
 </el-dialog>
   </el-row>
@@ -188,7 +188,8 @@ export default {
         },
         Role:'',
         SelectName:'',
-        SelectValue:"1"
+        SelectValue:"1",
+        selectRoleId:''
         }
       
            
@@ -212,12 +213,13 @@ export default {
        ShowRoleConfirm(row){
            console.log(row);
          this.SelectName=row.name;//http://localhost:5000/api/Roles/GetRole
+         this.selectRoleId=row.id;
           this.dialogFormVisibleRole=true;
           this.$http.get('Roles/GetRole').then(res=>{
            this.Role =  res.data;      
           });
           
-           this.$http.get('RoleUser/GetRoleUser',row.Id).then(res=>{
+           this.$http.get('RoleUser/GetRoleUser',row.id).then(res=>{
                console.log("这是返回过来的结果")
                 var date =res.data.entity
                 if(date)
@@ -225,6 +227,16 @@ export default {
                  this.SelectValue=data.role_Id;
                 }
           });
+       },
+       EditRole()
+       {
+         this.$http.post('RoleUser/PostRole_User',{
+           role_Id:this.SelectValue,
+           User_Id:this.selectRoleId
+         })
+           this.dialogFormVisibleRole=false;
+          
+
        },
        ShowEditUser(user)
        {
