@@ -141,9 +141,9 @@
 <el-dialog title="权限分配" :visible.sync="dialogFormVisibleRole">
   <el-form >
     <el-form-item label="名称" label-width="100px">
-           {{SelectName}}={{SelectValue}}
+           {{SelectName}}
     </el-form-item>
-    <el-form-item label="活动区域" label-width="100px">
+    <el-form-item label="角色名称" label-width="100px">
       <el-select v-model="SelectValue" >
         <el-option label="请选择" value="1"></el-option>
         <el-option :label="item.name" :value="item.role_Id"
@@ -211,6 +211,8 @@ export default {
         
        },
        ShowRoleConfirm(row){
+         this.SelectValue='1';
+
            console.log(row);
          this.SelectName=row.name;//http://localhost:5000/api/Roles/GetRole
          this.selectRoleId=row.id;
@@ -219,12 +221,16 @@ export default {
            this.Role =  res.data;      
           });
           
-           this.$http.get('RoleUser/GetRoleUser',row.id).then(res=>{
+           this.$http.get(`RoleUser/GetRoleUser?id=${row.id}`).then(res=>{
                console.log("这是返回过来的结果")
                 var date =res.data.entity
+                console.log(res);
                 if(date)
                 {
-                 this.SelectValue=data.role_Id;
+                 this.SelectValue=date.role_Id;
+                }else
+                {
+            
                 }
           });
        },

@@ -2,6 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+///MyBread 其实是组件选项所在的对象
+import MyBread from '@/components/coscom/myBread.vue'
 import router from './router'
 import ElementUI from 'element-ui';
 import myServerhttp from '@/plugins/http.js'
@@ -18,6 +20,10 @@ Vue.use(myServerhttp);
 Vue.filter('fmtdate',(v)=>{
   return moment(v).format('YYYY-MM-DD');
 })
+////全局自定义组件
+Vue.component('my-Bread',
+  MyBread
+)
 new Vue({
   el: '#app',
   router,
