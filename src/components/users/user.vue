@@ -297,7 +297,7 @@ export default {
       },
         getUserList(){
           /////需要登录之外的请求需要验证请求头
-           const token =localStorage.getItem('token');
+      
           // this.$http.defaults.headers.common['Authorization']=token;
           
            this.$http.get(`UserInfoes/GetUsers`,{params:{
