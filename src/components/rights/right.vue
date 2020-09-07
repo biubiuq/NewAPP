@@ -1,10 +1,11 @@
 <template>
   <el-card separator-class="el-icon-arrow-right">
 
-  <my-Bread  level1='权限管理' level2='权限列表2'></my-Bread>
-   <template>
-  <el-table
-    :data="dataList"
+  <my-Bread  level1='权限管理' level2='权限列表'></my-Bread>
+   
+  <el-table class="datatable"
+    :data="tableData"
+    height="400px"
     border
     style="width: 100%">
     <el-table-column
@@ -24,27 +25,37 @@
     <el-table-column
       prop="type"
       label="类别">
+      <template
+        slot-scope="scope"
+      >
+      <span v-if="scope.row.type==1">一级</span>
+      <span v-if="scope.row.type==''"></span>
+
+      </template>
     </el-table-column>
   </el-table>
-</template>
+
   </el-card>
 </template>
 
 <script>
 export default {
      created(){
-       //  this.getRightlist()
+         this.getRightlist()
      },
-     data(){
-        return{
-             dataList:{}
-        }
-     },
+   data() {
+      return {
+        tableData: []
+      
+      }
+    },
      methods:{
           getRightlist(){
-               this.$http.get('Permissons/GetPermisson',this.Users ).then(res=>{
-                   //  this.dataList= res.data
-                      console.log(res);
+               this.$http.get('Permissons/GetPermisson' ).then(res=>{
+                     this.tableData= res.data
+                      console.log(this.tableData);
+                      console.log('这是返回的值')
+                       console.log(res.data);
 
                })
                
@@ -52,7 +63,9 @@ export default {
      }
 }
 </script>
-
+ 
 <style>
-
+  .datatable{
+      margin-top: 20px;
+   }
 </style>
