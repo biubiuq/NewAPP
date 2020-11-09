@@ -87,13 +87,13 @@ export default {
   ///钩子函数 ，在页面还未加载的时候执行此方法
    beforeCreate()
    {
-     const token= localStorage.getItem('token');
-     console.log(token);
-    if(!token)
-    {
-      console.log('跳转了')
-      this.$router.push({name:'login'});
-    }
+    //  const token= localStorage.getItem('token');
+    //  console.log(token);
+    // if(!token)
+    // {
+    //   console.log('跳转了')
+    //   this.$router.push({name:'login'});
+    // }
    },
    methods:{
      loginout(){

@@ -5,10 +5,22 @@ import home from '@/components/home/home.vue'
 import users from '@/components/users/user.vue'
 import Right from '@/components/rights/right.vue'
 import Role from '@/components/rights/role.vue'
+import redirect from '@/components/home.vue'
+import vuexhome from '@/components/Vuex/home.vue'
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path:'/',
+      name:'redirect',
+      component:redirect
+    },
+    {
+      path:'/vuexhome',
+      name:'vuexhome',
+      component:vuexhome
+    },
     {
       path: '/login',
       name: 'login',
@@ -36,5 +48,6 @@ export default new Router({
       component: home
    
     }
-  ]
+  ],
+  mode:'history'
 })

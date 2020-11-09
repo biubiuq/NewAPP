@@ -34,38 +34,18 @@ export default {
     },
     methods:{
         handleLogin(){
-         this.$http.post('userinfoes/GetUserInfo',this.Users ).then(res=>{
-             console.log(res);
             
              ////跳转到首页
              ////2.提示成功
              ///不成功
              ///1.提示信息
-            //aa
+            //aa         
+        this.$router.push({name:'home'});
+            
             
              
-          
-             if(res.status==200) 
-             {
-
-               var t =res.data.entity
-                   console.log(res.data);
-                 if(!t)
-                 {
-                     this.$message.warning('登录失败');
-                 }
-                 localStorage.setItem('token',t.token);
-                      this.$message.success('登录成功');
-                      this.$router.push({name:'home'});
             
-            
-             }
-             else
-             {
-                  this.$message.warning('登录失败');
-                 
-             }
-         })
+       
         }
     }
 }
