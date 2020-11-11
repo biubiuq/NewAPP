@@ -4,7 +4,12 @@ vue.use(Vuex)
 //2 c创建对象
  const store =new Vuex.Store({
 
-
+     state:{
+         counter:1000
+     },
+     mutations:{},
+     actions:{},
+     modules:{}
 
  });
  export default store;
