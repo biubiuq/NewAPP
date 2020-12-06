@@ -10,7 +10,7 @@
         console.log("请求之前做的事情")
         console.log(config)
         const token= localStorage.getItem('token');
-        if(config.url!="userinfoes/GetUserInfo")
+        if(config.url!="user")
         {
           if(!token)
           {

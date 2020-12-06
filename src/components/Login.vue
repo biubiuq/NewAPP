@@ -5,10 +5,10 @@
       label-width="80px" 
       :model="Users">
   <el-form-item label="用户名">
-    <el-input v-model="Users.name"></el-input>
+    <el-input v-model="Users.userName"></el-input>
   </el-form-item>
   <el-form-item label="密码">
-    <el-input v-model="Users.password"></el-input>
+    <el-input v-model="Users.passWord"></el-input>
   </el-form-item>
 
      <el-button 
@@ -27,27 +27,17 @@ export default {
       return {
         labelPosition: 'top',
         Users: {
-          name: '',
-          password: ''
+          userName: '',
+          passWord: ''
         }
       };
     },
     methods:{
         handleLogin(){
-         this.$http.post('userinfoes/GetUserInfo',this.Users ).then(res=>{
-             console.log(res);
-            
-             ////跳转到首页
-             ////2.提示成功
-             ///不成功
-             ///1.提示信息
-            //aa
-            
-             
-          
+         this.$http.get('user',this.Users).then(res=>{
+              console.log(res);
              if(res.status==200) 
              {
-
                var t =res.data.entity
                    console.log(res.data);
                  if(!t)
@@ -57,8 +47,6 @@ export default {
                  localStorage.setItem('token',t.token);
                       this.$message.success('登录成功');
                       this.$router.push({name:'home'});
-            
-            
              }
              else
              {
