@@ -34,7 +34,7 @@ export default {
     },
     methods:{
         handleLogin(){
-         this.$http.get('user',this.Users).then(res=>{
+         this.$http.post('user',this.Users).then(res=>{
               console.log(res);
              if(res.status==200) 
              {
