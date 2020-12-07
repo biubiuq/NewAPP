@@ -87,7 +87,7 @@ export default {
   ///钩子函数 ，在页面还未加载的时候执行此方法
    beforeCreate()
    {
-     const token= localStorage.getItem('token');
+     const token= this.$store.state.token;
      console.log(token);
     if(!token)
     {

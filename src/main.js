@@ -9,6 +9,7 @@ import ElementUI from 'element-ui';
 import myServerhttp from '@/plugins/http.js'
 import '@/assets/css/reset.css'
 import 'element-ui/lib/theme-chalk/index.css';
+import  store from '@/store'
 Vue.config.productionTip = false
 ///为什么不能这样用,因为不是vue插件
 ///但是我又想这样使用
@@ -28,5 +29,6 @@ new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  store
 })
