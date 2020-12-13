@@ -1,6 +1,8 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+
+import Vuex from 'vuex'
 import App from './App'
 ///MyBread 其实是组件选项所在的对象
 import MyBread from '@/components/coscom/myBread.vue'
@@ -16,6 +18,7 @@ Vue.config.productionTip = false
 Vue.use(ElementUI);
 ///自定义插件
 Vue.use(myServerhttp);
+Vue.use(Vuex);
 /* eslint-disable no-new */
 ////全局过滤器，处理日期
 Vue.filter('fmtdate',(v)=>{

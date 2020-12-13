@@ -8,13 +8,14 @@
       axios.defaults.baseURL="http://localhost:5000/api/";
       axios.interceptors.request.use(function (config) {
      
-        const store= Vue.$store;
+     
         if(config.url!="Account")
         {
          
-          if(!store)
+          if(true)
           {
-            console.log('跳转了')
+            console.log(Vue);
+            console.log(Vue.$store);
             this.$router.push({name:'login'});
           }
         }
