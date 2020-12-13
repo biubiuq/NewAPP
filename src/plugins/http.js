@@ -14,8 +14,7 @@
          
           if(true)
           {
-            console.log(Vue);
-            console.log(Vue.$store);
+         
             this.$router.push({name:'login'});
           }
         }
