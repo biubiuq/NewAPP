@@ -300,7 +300,7 @@ export default {
       
           // this.$http.defaults.headers.common['Authorization']=token;
           
-           this.$http.get(`UserInfoes/GetUsers`,{params:{
+           this.$http.get(`User`,{params:{
                     pageNum:this.pageNum,
                     pageSize:this.pageSize,
                     userinfo:{

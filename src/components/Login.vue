@@ -38,15 +38,15 @@ export default {
               console.log(res);
              if(res.status==200) 
              {
-               var t =res.data.entity
-                   console.log(res.data);
+               var t =res.data;
                  if(!t)
                  {
                      this.$message.warning('登录失败');
                  }
-                 localStorage.setItem('token',t.token);
-                      this.$message.success('登录成功');
-                      this.$router.push({name:'home'});
+                this.$store.commit('setToken',t);
+                console.log(this.$store.state.token);
+                this.$message.success('登录成功');
+                this.$router.push({name:'home'});
              }
              else
              {
