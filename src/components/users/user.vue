@@ -23,6 +23,7 @@
       </el-col>
       <!--表格数据--->
  <el-table
+    @row-dblclick="dbclickShowEditUser"
     :data="userList"
     height="500"
     border
@@ -32,23 +33,18 @@
       label="#"
       width="60">
     </el-table-column>
+        <el-table-column
+      prop="userName"
+      label="账号"
+      width="180">
+    </el-table-column>
     <el-table-column
-      prop="password"
+      prop="passWord"
       label="密码"
       width="100">
     </el-table-column>
-       <el-table-column
-      prop="address"
-      label="地址"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="180">
-    </el-table-column>
      <el-table-column
-      prop="create_Date"
+      prop="createDate"
       label="创建时间">
     </el-table-column>
      <el-table-column 
@@ -59,13 +55,14 @@
       active-color="#13ce66"
        active-value="0"
        inactive-value="1"
+       @change="changerStatus"
      inactive-color="#ff4949">
        </el-switch>
      </template>
          </el-table-column>
         <el-table-column
-      prop="token"
-      label="token">
+      prop="createUser"
+      label="创建人">
     </el-table-column>
      
          <el-table-column
@@ -93,20 +90,25 @@
     <el-dialog title="添加用户" :visible.sync="dialogFormVisibleAdd">
   <el-form :model="form">
     <el-form-item label="用户名" label-width="100px">
-      <el-input v-model="form.name" autocomplete="off"></el-input>
+      <el-input v-model="form.userName" autocomplete="off"></el-input>
     </el-form-item>
     <el-form-item label="密 码" label-width="100px">
       <el-input v-model="form.password" autocomplete="off"></el-input>
+      </el-form-item>
+       <el-form-item label="状态" label-width="100px">
+        <el-select v-model="form.statusType" placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.codeName"
+      :value="item.codeType">
+    </el-option>
+  </el-select>
     </el-form-item>
-      <el-form-item label="token" label-width="100px">
-      <el-input v-model="form.token" autocomplete="off"></el-input>
+      <el-form-item label="创建人" label-width="100px">
+      <el-input v-model="form.createUser" autocomplete="off"></el-input>
     </el-form-item>
-      <el-form-item label="状态" label-width="100px">
-      <el-input v-model="form.status" autocomplete="off"></el-input>
-    </el-form-item>
-      <el-form-item label="地址" label-width="100px">
-      <el-input v-model="form.address" autocomplete="off"></el-input>
-    </el-form-item>
+ 
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisibleAdd=false">取 消</el-button>
@@ -117,20 +119,25 @@
     <el-dialog title="编辑用户" :visible.sync="dialogFormVisibleEdit">
   <el-form :model="form">
     <el-form-item label="用户名"  label-width="100px">
-      <el-input v-model="form.name" disabled autocomplete="off"></el-input>
+      <el-input v-model="form.userName" disabled autocomplete="off"></el-input>
     </el-form-item>
     <el-form-item label="密 码" label-width="100px">
-      <el-input v-model="form.password" autocomplete="off"></el-input>
+      <el-input v-model="form.passWord" autocomplete="off"></el-input>
     </el-form-item>
-      <el-form-item label="token" label-width="100px">
-      <el-input v-model="form.token" autocomplete="off"></el-input>
-    </el-form-item>
+    
         <el-form-item label="状态" label-width="100px">
-      <el-input v-model="form.status" autocomplete="off"></el-input>
+   
+  <el-select v-model="form.statusType" placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.codeName"
+      :value="item.codeType">
+    </el-option>
+  </el-select>
+
     </el-form-item>
-      <el-form-item label="地址" label-width="100px">
-      <el-input v-model="form.address" autocomplete="off"></el-input>
-    </el-form-item>
+   
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisibleEdit=false">取 消</el-button>
@@ -175,21 +182,23 @@ export default {
             total:20,
          
         userList:[],
+        options:[{
+          codeType:"1",
+          codeName:"参数1"
+        },{
+             codeType:"2",
+          codeName:'参数2'
+        }],
         ////对话框
         dialogFormVisibleAdd:false,
         dialogFormVisibleEdit:false,
         dialogFormVisibleRole:false,
-        form:{
-          Id:'',
-         name:'',
-         password:'',
-         token:'',
-         status:''
-        },
+        form:'',
         Role:'',
         SelectName:'',
         SelectValue:"1",
-        selectRoleId:''
+        selectRoleId:'',
+        StatusType:''
         }
       
            
@@ -198,16 +207,27 @@ export default {
     ///钩子函数在创建的时候加载此方法
     created(){
         this.getUserList();
+       this.addType();
     },
     ////api/{controller}/{action}/{id}
     methods:{
+       addType(){
+         this.$http.get('BaseType/D1').then(res=>{
+           console.log('对象basetype')
+           console.log(res);
+                this.options=res.data;
+
+         });
+
+       },
        addUser(){
-          const res = this.$http.post('userInfoes/PostUserInfo',this.form).then(res=>{
+          const res = this.$http.post('User',this.form).then(res=>{
          this.dialogFormVisibleAdd=false;
           console.log(res);
             this.getUserList();
           });
              this.form={};
+
         
        },
        ShowRoleConfirm(row){
@@ -244,9 +264,16 @@ export default {
           
 
        },
+       dbclickShowEditUser(row)
+       {
+         console.log(row);
+         this.form=row;
+        this.dialogFormVisibleEdit=true;
+       },
        ShowEditUser(user)
        {
-         this.form=user;
+        /// this.form=user;
+        console.log(user);
         this.dialogFormVisibleEdit=true;
        },
        EditUser()
@@ -284,6 +311,7 @@ export default {
         ShowDialog()
         {
              this.dialogFormVisibleAdd=true;
+             this.form={};
         },
         handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -295,6 +323,10 @@ export default {
         this.pageNum=val;
            this.getUserList();
       },
+
+      changerStatus(){
+        this.$message.success("值发送了变化")
+      },
         getUserList(){
           /////需要登录之外的请求需要验证请求头
       
@@ -303,15 +335,14 @@ export default {
            this.$http.get(`User`,{params:{
                     pageNum:this.pageNum,
                     pageSize:this.pageSize,
-                    userinfo:{
-                      NAME:this.query
-                    }
+                    userName:this.query
+                    
 
            }}).then(res=>{
              console.log(res);
                if(res.status==200)
-               {/////////aaaaaaaaaaaaaaaaaaaaaaaaaaaa为什么没有提交到远程分页
-                   this.userList=res.data.entity;
+               {
+                   this.userList=res.data.list;
                    this.total=res.data.total;
                       
                    this.$message.success('成功刷新列表')
@@ -336,5 +367,12 @@ export default {
   }
  .inputSearch{
       width: 300px;
+  }
+    .el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
   }
 </style>

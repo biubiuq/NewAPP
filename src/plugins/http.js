@@ -1,5 +1,6 @@
 
-
+import  store from '@/store'
+import router from '@/router'
   import axios from 'axios'
 ///插件模板
  const MyhttpSever={};
@@ -8,17 +9,22 @@
       axios.defaults.baseURL="http://localhost:5000/api/";
       axios.interceptors.request.use(function (config) {
      
-     
+         
         if(config.url!="Account")
         {
+           var token =store.state.token;
          
-          if(true)
+          if(!token)
           {
          
-            this.$router.push({name:'login'});
+            router.push({name:'login'});
+          }
+          else
+          {
+            config.headers.common['Authorization']="Bearer  "+token;
           }
         }
-      
+        console.log(config)
 
         // 在发送请求之前做些什么
         return config;
