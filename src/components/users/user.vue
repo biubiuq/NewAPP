@@ -151,9 +151,9 @@
            {{SelectName}}
     </el-form-item>
     <el-form-item label="角色名称" label-width="100px">
-      <el-select v-model="SelectValue" >
-        <el-option label="请选择" value="1"></el-option>
-        <el-option :label="item.name" :value="item.role_Id"
+      <el-select v-model="selectRole" multiple placeholder="请选择"  >
+    
+        <el-option :label="item.name" :value="item.id"
         v-for="(item, index) in Role" :key="index"  
         ></el-option>
       </el-select>
@@ -195,6 +195,7 @@ export default {
         dialogFormVisibleRole:false,
         form:'',
         Role:'',
+        selectRole:[],
         SelectName:'',
         SelectValue:"1",
         selectRoleId:'',
@@ -231,33 +232,36 @@ export default {
         
        },
        ShowRoleConfirm(row){
-         this.SelectValue='1';
-
+        this.selectRole=''
            console.log(row);
-         this.SelectName=row.name;//http://localhost:5000/api/Roles/GetRole
+         this.SelectName=row.userName;//http://localhost:5000/api/Roles/GetRole
          this.selectRoleId=row.id;
           this.dialogFormVisibleRole=true;
-          this.$http.get('Roles/GetRole').then(res=>{
-           this.Role =  res.data;      
-          });
-          
-           this.$http.get(`RoleUser/GetRoleUser?id=${row.id}`).then(res=>{
+          this.$http.get('Role').then(res=>{
+              
+           this.Role =  res.data;     
+           console.log("返回过来的角色");
+           console.log(res.data); 
+                      this.$http.get(`RoleUser?id=${row.id}`).then(res=>{
                console.log("这是返回过来的结果")
-                var date =res.data.entity
+                var date =res.data;
                 console.log(res);
                 if(date)
                 {
-                 this.SelectValue=date.role_Id;
+                 this.selectRole.push(date.roleId)
                 }else
                 {
-            
+                 
                 }
           });
+          });
+          
+
        },
        EditRole()
        {
          this.$http.post('RoleUser/PostRole_User',{
-           role_Id:this.SelectValue,
+           role_Id:this.selectRole,
            User_Id:this.selectRoleId
          })
            this.dialogFormVisibleRole=false;
@@ -278,7 +282,7 @@ export default {
        },
        EditUser()
        {
-          this.$http.put('userInfoes/PutUserInfo',this.form).then(res=>{
+          this.$http.put('User',this.form).then(res=>{
          this.dialogFormVisibleEdit=false;
           console.log(res);
             this.getUserList();
@@ -292,7 +296,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-           this.$http.delete(`userInfoes/DeleteUserInfo/${ids}`).then
+           this.$http.delete(`User/${ids}`).then
           (res=> {
              this.$message({
             type: 'success',
@@ -321,7 +325,7 @@ export default {
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.pageNum=val;
-           this.getUserList();
+        this.getUserList();
       },
 
       changerStatus(){
