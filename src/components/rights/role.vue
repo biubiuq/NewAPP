@@ -5,9 +5,10 @@
        level2="角色列表"
       ></my-Bread>
       <el-row class="AddRole">
-          <el-col>
-  <el-button type="info" round>添加角色</el-button>
-          </el-col>
+        <el-input v-model="input" class="inputSearch"  size="medium" placeholder="请输入内容">
+    
+        </el-input>
+               <el-button type="success" round icon="el-icon-search">添加角色</el-button>
       </el-row>
           <!--表格数据--->
  <el-table
@@ -73,7 +74,7 @@ export default {
     },
      methods:{
           getRightlist(){
-               this.$http.get('Roles/GetRole' ).then(res=>{
+               this.$http.get('Role' ).then(res=>{
                      this.tableData= res.data
                       console.log(this.tableData);
                       console.log('这是返回的值')
@@ -101,6 +102,9 @@ export default {
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
+  }
+   .inputSearch{
+      width: 300px;
   }
 
 </style>

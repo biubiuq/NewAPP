@@ -54,11 +54,8 @@ export default {
                      this.$message.warning('登录失败');
                  }
                 this.$store.commit('setToken',t);
-                console.log(this.$store);
-                console.log(this.$store.state.token);
                 this.$message.success('登录成功');
                 this.$router.push({name:'home'});
-                console.log(this.$router);
              }
              else
              {

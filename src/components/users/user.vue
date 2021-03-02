@@ -232,37 +232,40 @@ export default {
         
        },
        ShowRoleConfirm(row){
-        this.selectRole=''
-           console.log(row);
+        this.selectRole=[];
+         
          this.SelectName=row.userName;//http://localhost:5000/api/Roles/GetRole
          this.selectRoleId=row.id;
-          this.dialogFormVisibleRole=true;
           this.$http.get('Role').then(res=>{
               
            this.Role =  res.data;     
            console.log("返回过来的角色");
            console.log(res.data); 
-                      this.$http.get(`RoleUser?id=${row.id}`).then(res=>{
+           this.$http.get(`RoleUser?id=${row.id}`).then(res=>{
                console.log("这是返回过来的结果")
                 var date =res.data;
                 console.log(res);
                 if(date)
                 {
-                 this.selectRole.push(date.roleId)
+                 this.selectRole=date.roleId.split(',');
                 }else
                 {
                  
                 }
+                  this.dialogFormVisibleRole=true;
           });
           });
+            
+      
           
 
        },
        EditRole()
        {
-         this.$http.post('RoleUser/PostRole_User',{
-           role_Id:this.selectRole,
-           User_Id:this.selectRoleId
+      
+         this.$http.post('RoleUser',{
+           RoleId:this.selectRole.join(','),
+           UserId:this.selectRoleId
          })
            this.dialogFormVisibleRole=false;
           

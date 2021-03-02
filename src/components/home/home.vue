@@ -73,7 +73,17 @@
 
     </el-aside>
     <el-main>
-      
+      <el-tabs v-model="editableTabsValue" type="card" @tab-click="handleClick" >
+  <el-tab-pane 
+    :key="item.name"
+    v-for="(item) in editableTabs"
+    :label="item.title"
+    :name="item.name"
+  >
+  
+  </el-tab-pane>
+</el-tabs>
+
 
     <router-view/>
     </el-main>
@@ -95,12 +105,31 @@ export default {
       this.$router.push({name:'login'});
     }
    },
+     data() {
+      return {
+        editableTabsValue: '3',
+        editableTabs: [{
+          title: '用户列表',
+          name: '1',
+          content: 'Tab 1 content'
+        }, {
+          title: 'Tab 2',
+          name: '2',
+          content: 'Tab 2 content'
+        }],
+        tabIndex: 2
+      }
+     },
    methods:{
      loginout(){
         localStorage.removeItem('token');
        this.$message.success('退出成功');
           this.$router.push({name:'login'});
-     }
+     },
+    handleClick(tab, event) {
+           this.$router.push({name:'users'});
+      }
+     
    }
 }
 </script>
