@@ -19,7 +19,8 @@ export default new Router({
         {
           name:'users',
           path:'/users',
-          component:users
+          component:users,
+          meta:{ keepAlive: true}
         }, {
           name:'right',
           path:'/rights',
@@ -28,7 +29,8 @@ export default new Router({
         {
           name:'role',
           path:'/role',
-          component:Role
+          component:Role,
+          meta:{ keepAlive: true}
         }
       ],
       path: '/home',

@@ -15,19 +15,29 @@
  
            <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
   </el-input>
-        <el-button 
+    
+      </el-col>
+       </el-row>
+       <el-row>
+  <el-button>导入数据</el-button>
+  <el-button type="primary">导出数据</el-button>
+  <el-button type="success">成功按钮</el-button>
+  <el-button type="info">信息按钮</el-button>
+  <el-button type="warning">警告按钮</el-button>
+  <el-button type="danger">危险按钮</el-button>
+      <el-button 
      class="login-btn"
       type="primary" 
       @click="ShowDialog"
      > 添加用户</el-button>
-      </el-col>
+</el-row>
       <!--表格数据--->
  <el-table
     @row-dblclick="dbclickShowEditUser"
     :data="userList"
-    height="500"
+    height="400"
     border
-    style="width: 100%">
+    style="width: 100%;">
      <el-table-column type="index"
       prop="date"
       label="#"
@@ -69,9 +79,25 @@
       prop="address"
       label="操作">
       <template slot-scope="scope">
-  <el-button size='mini' type="success" @click="ShowRoleConfirm(scope.row)" icon="el-icon-check" circle></el-button>
-  <el-button plan type="danger"  size='mini' @click="ShowDeleteUserMsg(scope.row.id)"  icon="el-icon-delete" circle></el-button>
-  <el-button  type="primary" icon="el-icon-edit" size='mini' @click="ShowEditUser(scope.row)" circle></el-button>
+     <el-row :gutter="30">
+  <el-col :span="3"><el-button size='mini' type="success" @click="ShowRoleConfirm(scope.row)" icon="el-icon-check" circle></el-button>
+ </el-col>
+  <el-col :span="3">   <el-button plan type="danger"  size='mini' @click="ShowDeleteUserMsg(scope.row.id)"  icon="el-icon-delete" circle></el-button>
+ </el-col>
+  <el-col :span="3">   <el-button  type="primary" icon="el-icon-edit" size='mini' @click="ShowEditUser(scope.row)" circle></el-button>
+ </el-col>
+  <el-col :span="13">     <el-select  size='mini' v-model="value" placeholder="跳转页面">
+    <el-option
+      v-for="item in linklist"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+ </el-col>
+</el-row>
+ 
+      
       </template>
     </el-table-column>
   </el-table>
@@ -164,7 +190,7 @@
     <el-button type="primary" @click="EditRole()">确 定</el-button>
   </div>
 </el-dialog>
-  </el-row>
+ 
   </el-card>
   
  </div>
@@ -199,17 +225,34 @@ export default {
         SelectName:'',
         SelectValue:"1",
         selectRoleId:'',
-        StatusType:''
+        StatusType:'',
+        linklist: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value: ''
         }
-      
-           
-        
     },
     ///钩子函数在创建的时候加载此方法
     created(){
+       this.$message.success("被创建了");
+     
         this.getUserList();
        this.addType();
     },
+    
     ////api/{controller}/{action}/{id}
     methods:{
        addType(){
@@ -371,6 +414,7 @@ export default {
 }
   .box{
       width: 100%;
+      height: 80%;
   }
  .inputSearch{
       width: 300px;
@@ -381,5 +425,10 @@ export default {
   }
   .el-icon-arrow-down {
     font-size: 12px;
+  }
+  .linkc{
+    height: 50%;
+     width: 50%;
+     display:block;
   }
 </style>

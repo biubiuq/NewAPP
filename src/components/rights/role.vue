@@ -5,7 +5,7 @@
        level2="角色列表"
       ></my-Bread>
       <el-row class="AddRole">
-        <el-input v-model="input" class="inputSearch"  size="medium" placeholder="请输入内容">
+        <el-input v-model="searchData" class="inputSearch"  size="medium" placeholder="请输入内容">
     
         </el-input>
                <el-button type="success" round icon="el-icon-search">添加角色</el-button>
@@ -68,7 +68,8 @@ export default {
      },
    data() {
       return {
-        tableData: []
+        tableData: [],
+        searchData:""
       
       }
     },

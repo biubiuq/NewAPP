@@ -26,7 +26,7 @@
           <span>用户管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item  class="el-icon-star-off"
+          <el-menu-item @click='addtab("用户列表","users")'  class="el-icon-star-off"
             index="users">用户列表</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
@@ -39,7 +39,7 @@
           <el-menu-item index="rights">权限列表</el-menu-item>
         </el-menu-item-group>
            <el-menu-item-group>
-          <el-menu-item index="role">角色列表</el-menu-item>
+          <el-menu-item index="role" @click='addtab("角色列表","role")'>角色列表</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
        <el-submenu index="3">
@@ -73,7 +73,7 @@
 
     </el-aside>
     <el-main>
-      <el-tabs v-model="editableTabsValue" type="card" @tab-click="handleClick" >
+      <el-tabs v-model="editableTabsValue" type="card" closable  @edit="handleTabsEdit" @tab-click="handleClick" >
   <el-tab-pane 
     :key="item.name"
     v-for="(item) in editableTabs"
@@ -84,8 +84,10 @@
   </el-tab-pane>
 </el-tabs>
 
-
-    <router-view/>
+ <keep-alive>
+    <router-view v-if="$route.meta.keepAlive"></router-view>
+     </keep-alive>
+       <router-view v-if="!$route.meta.keepAlive"></router-view>
     </el-main>
   </el-container>
    </el-container>
@@ -110,11 +112,11 @@ export default {
         editableTabsValue: '3',
         editableTabs: [{
           title: '用户列表',
-          name: '1',
+          name: 'users',
           content: 'Tab 1 content'
         }, {
-          title: 'Tab 2',
-          name: '2',
+          title: '角色列表',
+          name: 'role',
           content: 'Tab 2 content'
         }],
         tabIndex: 2
@@ -127,8 +129,48 @@ export default {
           this.$router.push({name:'login'});
      },
     handleClick(tab, event) {
-           this.$router.push({name:'users'});
+           this.$router.push({name:tab.name}).catch(data => {  });
+      },
+      addtab(name,index){
+        var data= this.editableTabs.filter(function(item){
+       return item.title == name; 
+       })
+       if(data.length==0)
+       {
+            this.editableTabs.push({
+            title: name,
+             name: index
+          })
+       }
+      
+      },
+         handleTabsEdit(targetName, action) {
+     
+       if (action === 'remove') {
+          let tabs = this.editableTabs;
+          let activeName = this.editableTabsValue;
+          if (activeName === targetName) {
+            tabs.forEach((tab, index) => {
+              if (tab.name === targetName) {
+                let nextTab = tabs[index + 1] || tabs[index - 1];
+                if (nextTab) {
+                  activeName = nextTab.name;
+                }
+              }
+            });
+          }
+          this.editableTabsValue = activeName;
+          this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+
+        }
+        if(this.editableTabs.length>0)
+        {
+              this.$router.push({name:this.editableTabs[0].name}).catch(data => {  });
+   
+        }
+   
       }
+    
      
    }
 }
